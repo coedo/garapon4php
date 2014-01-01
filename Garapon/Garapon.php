@@ -58,6 +58,17 @@ class Garapon
         return $this;
     }
 
+    protected function _checkStatus($errorMessages, $prefix = '')
+    {
+        foreach ($this->response->results as $code => $value)
+        {
+            if (isset($errorMessages[$code]))
+            {
+                throw new \Exception($prefix . $errorMessages[$code]);
+            }
+        }
+    }
+
     public function settings($path = null)
     {
         $defaultPath = 'developer_info.json';
@@ -177,15 +188,5 @@ class Garapon
         $version = $version ? : $this->version;
         $url = "http://$host/gapi/$version/";
         $this->_gapi->url = $url;
-    }
-    protected function _checkStatus($errorMessages, $prefix = '')
-    {
-        foreach ($this->response->results as $code => $value)
-        {
-            if (isset($errorMessages[$code]))
-            {
-                throw new \Exception($prefix . $errorMessages[$code]);
-            }
-        }
     }
 }
