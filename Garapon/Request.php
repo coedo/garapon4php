@@ -24,6 +24,11 @@ class Request {
             '100' => 'login failed',
             '200' => 'login failed',
         ),
+        'search' => array(
+            '0' => 'invalid session',
+            '100' => 'invalid params',
+            '200' => 'DB connect failed',
+        ),
     );
 
     /**
