@@ -166,6 +166,12 @@ class Garapon
         return $this->{$method}($data, $options);
     }
 
+    public function searchCaption($data = array(), $options = array())
+    {
+        $data['s'] = 'c'; // 字幕検索
+        return $this->login()->request->post('search', $data, $options);
+    }
+
     public function searchEpg($data = array(), $options = array())
     {
         $data['s'] = 'e'; // EPG検索
