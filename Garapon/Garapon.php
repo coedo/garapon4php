@@ -36,21 +36,6 @@ class Garapon
     public $response;
 
     /**
-     * @var Gapi
-     */
-    private $_gapi;
-
-    /**
-     * @var Setting
-     */
-    private $_setting;
-
-    /**
-     * @var GaraponTVConnectionInfo
-     */
-    public $connection_info;
-
-    /**
      * @var
      */
     public $url;
