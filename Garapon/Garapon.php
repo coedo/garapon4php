@@ -69,45 +69,6 @@ class Garapon
         }
     }
 
-    public function settings($path = null)
-    {
-        $defaultPath = 'developer_info.json';
-        if (!$path) {
-            $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . $defaultPath;
-        }
-        $settings = $this->_settings($path);
-        $this->settings = $settings;
-        $this->request->connection += $settings;
-        return $this;
-    }
-
-    protected function _settings($path)
-    {
-        if (!file_exists($path))
-        {
-            throw new \Exception("File not found: $path");
-        }
-        $json = file_get_contents($path);
-        $settings = json_decode($json, true);
-        if ($settings == null || !is_array($settings))
-        {
-            throw new \Exception("Cannot Decode JSON file: $path");
-        }
-        $defaults = array(
-            'user_id' => null,
-            'password' => null,
-            'developer_id' => null,
-            'api_version' => self::API_VERSION,
-            'api_dir' => self::API_DIR,
-        );
-        $settings += $defaults;
-        if (empty($settings['user_id']) || empty($settings['password']) || empty($settings['developer_id']))
-        {
-            throw new \Exception('Invalid config file');
-        }
-        return $settings;
-    }
-
     public function getConnection($force = false)
     {
         if (!$force && ($this->isLoggedIn() || $this->isGetConnected()))
@@ -181,6 +142,45 @@ class Garapon
         ));
         $this->request->connection->gtvsession = $this->response->results->gtvsession;
         return $this;
+    }
+
+    public function settings($path = null)
+    {
+        $defaultPath = 'developer_info.json';
+        if (!$path) {
+            $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . $defaultPath;
+        }
+        $settings = $this->_settings($path);
+        $this->settings = $settings;
+        $this->request->connection += $settings;
+        return $this;
+    }
+
+    protected function _settings($path)
+    {
+        if (!file_exists($path))
+        {
+            throw new \Exception("File not found: $path");
+        }
+        $json = file_get_contents($path);
+        $settings = json_decode($json, true);
+        if ($settings == null || !is_array($settings))
+        {
+            throw new \Exception("Cannot Decode JSON file: $path");
+        }
+        $defaults = array(
+            'user_id' => null,
+            'password' => null,
+            'developer_id' => null,
+            'api_version' => self::API_VERSION,
+            'api_dir' => self::API_DIR,
+        );
+        $settings += $defaults;
+        if (empty($settings['user_id']) || empty($settings['password']) || empty($settings['developer_id']))
+        {
+            throw new \Exception('Invalid config file');
+        }
+        return $settings;
     }
 
     public function url($host, $version = null)
