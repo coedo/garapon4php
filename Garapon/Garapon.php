@@ -149,6 +149,29 @@ class Garapon
         return $this;
     }
 
+    /**
+     * @param string $type : 'EPG', 'Caption', 'Program', 'Favorite'
+     * @param array $data
+     * @param array $options
+     * @return mixed
+     * @throws \Exception
+     */
+    public function search($type, $data = array(), $options = array())
+    {
+        $method = $this->_buildMethod($type, 'search');
+        if (!method_exists($this, $method))
+        {
+            throw new \Exception("Undefined search type: $type");
+        }
+        return $this->{$method}($data, $options);
+    }
+
+    public function searchEpg($data = array(), $options = array())
+    {
+        $data['s'] = 'e'; // EPG検索
+        return $this->login()->request->post('search', $data, $options);
+    }
+
     public function settings($path = null)
     {
         $defaultPath = 'developer_info.json';
