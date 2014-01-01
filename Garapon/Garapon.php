@@ -106,12 +106,12 @@ class Garapon
 
     public function isGetConnected()
     {
-        return !empty($this->request->connection['gtvver']);
+        return isset($this->request->connection->gtvver);
     }
 
     public function isLoggedIn()
     {
-        return !empty($this->request->connection['gtvsession']);
+        return isset($this->request->connection->gtvsession);
     }
 
     public function login($force = false)
