@@ -137,6 +137,38 @@ class Request {
         return $this;
     }
 
+    protected function _parse($result, $type = null)
+    {
+        $type = $type ? $type : 'json';
+        $method = '_parse' . strtoupper($type[0]) . strtolower(substr($type, 1));
+        return $this->$method($result);
+    }
+
+    protected function _parseGarapon($result)
+    {
+        $results = new \stdClass();
+        $result = preg_split("/\n/", $result);
+        foreach ($result as $record)
+        {
+            list($key, $value) = preg_split('/;/', $record, 2);
+            $results->$key = $value;
+        }
+        $this->response->results = $results;
+        return $this->response->results;
+    }
+
+    protected function _parseJson($result)
+    {
+        $this->response->results = json_decode($result);
+        return $this->response->results;
+    }
+
+    public function post($method = '', $data = array(), $options = array())
+    {
+        $options['httpMethod'] = 'post';
+        return $this->request($method, $data, $options);
+    }
+
     public function request($method = '', $data = array(), $options = array())
     {
         $options += (array)$this->connection;
@@ -214,38 +246,6 @@ class Request {
             $result = curl_setopt($this->_ch, $option, $value);
         }
         return $result;
-    }
-
-    protected function _parse($result, $type = null)
-    {
-        $type = $type ? $type : 'json';
-        $method = '_parse' . strtoupper($type[0]) . strtolower(substr($type, 1));
-        return $this->$method($result);
-    }
-
-    protected function _parseGarapon($result)
-    {
-        $results = new \stdClass();
-        $result = preg_split("/\n/", $result);
-        foreach ($result as $record)
-        {
-            list($key, $value) = preg_split('/;/', $record, 2);
-            $results->$key = $value;
-        }
-        $this->response->results = $results;
-        return $this->response->results;
-    }
-
-    protected function _parseJson($result)
-    {
-        $this->response->results = json_decode($result);
-        return $this->response->results;
-    }
-
-    public function post($method = '', $data = array(), $options = array())
-    {
-        $options['httpMethod'] = 'post';
-        return $this->request($method, $data, $options);
     }
 
     public function url($url)
