@@ -103,6 +103,12 @@ class Request {
         return $this;
     }
 
+    public function get($method = '', $options = array())
+    {
+        $options['httpMethod'] = 'get';
+        return $this->request($method, array(), $options);
+    }
+
     protected function _init($url = null)
     {
         $url = $url ? $url : $this->url;
@@ -208,12 +214,6 @@ class Request {
             $result = curl_setopt($this->_ch, $option, $value);
         }
         return $result;
-    }
-
-    public function get($method = '', $options = array())
-    {
-        $options['httpMethod'] = 'get';
-        return $this->request($method, array(), $options);
     }
 
     protected function _parse($result, $type = null)
