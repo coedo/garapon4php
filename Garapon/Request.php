@@ -224,7 +224,8 @@ class Request {
             $type = $options['type'];
             unset($options['type']);
         }
-        if (!empty($options)) {
+        if (!empty($options))
+        {
             foreach ($options as $key => $value)
             {
                 if (!is_int($key))
@@ -235,7 +236,8 @@ class Request {
             $this->_setOption($options);
         }
         $result = $this->_exec();
-        if ($result) {
+        if ($result)
+        {
             $this->_close();
         }
         $results = $this->_parse($result, $type);
