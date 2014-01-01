@@ -35,19 +35,19 @@ class Garapon
     public $response;
 
     /**
-     * @var Request $webRequest
+     * @var array $settings
      */
-    public $webRequest;
+    public $settings = array();
 
     /**
-     * @var
+     * @var string $url
      */
     public $url;
 
     /**
-     * @var
+     * @var Request $webRequest
      */
-    public $settings = array();
+    public $webRequest;
 
     public function __construct($configFilePath = null)
     {
