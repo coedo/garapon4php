@@ -178,6 +178,15 @@ class Garapon
         return $this->login()->request->post('search', $data, $options);
     }
 
+    public function searchFavorite($data = array(), $options = array())
+    {
+        if (empty($data['rank']))
+        {
+            throw new \Exception('Required gtvid');
+        }
+        return $this->login()->request->post('search', $data, $options);
+    }
+
     public function searchProgram($data = array(), $options = array())
     {
         if (empty($data['gtvid']))
