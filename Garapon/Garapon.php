@@ -146,7 +146,8 @@ class Garapon
     public function settings($path = null)
     {
         $defaultPath = 'developer_info.json';
-        if (!$path) {
+        if (!$path)
+        {
             $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . $defaultPath;
         }
         $settings = $this->_settings($path);
