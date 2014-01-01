@@ -54,14 +54,19 @@ class Request {
         }
     }
 
-    public function buildUrl($method = '', $options = null)
+    public function buildUrl($method = '', $options = array())
     {
-        $options = $options ? : $this->connection;
+        $options += (array)$this->connection;
         extract($options);
         $url = sprintf("http://%s:%s/%s/%s/%s", $ip, $port, $api_dir, $api_version, $method);
+        if (!isset($addParams) || $addParams == false)
+        {
+            $query = isset($query) ? $query : array();
+            $addParams = true;
+        }
         if (isset($query))
         {
-            $url .= '?' . http_build_query($query);
+            $url .= $this->_buildQuery($query, $addParams);
         }
         $this->url = $url;
         return $this;
