@@ -74,6 +74,11 @@ class Garapon
         }
     }
 
+    protected function _get($method, $data, $options)
+    {
+        return $this->request->get($method, $data, $options);
+    }
+
     public function getConnection($force = false)
     {
         if (!$force && ($this->isLoggedIn() || $this->isGetConnected()))
@@ -149,6 +154,11 @@ class Garapon
         return $this;
     }
 
+    protected function _post($method, $data, $options)
+    {
+        return $this->request->post($method, $data, $options);
+    }
+
     /**
      * @param string $type : 'EPG', 'Caption', 'Program', 'Favorite'
      * @param array $data
@@ -169,13 +179,13 @@ class Garapon
     public function searchCaption($data = array(), $options = array())
     {
         $data['s'] = 'c'; // 字幕検索
-        return $this->login()->request->post('search', $data, $options);
+        return $this->login()->_post('search', $data, $options);
     }
 
     public function searchEpg($data = array(), $options = array())
     {
         $data['s'] = 'e'; // EPG検索
-        return $this->login()->request->post('search', $data, $options);
+        return $this->login()->_post('search', $data, $options);
     }
 
     public function searchFavorite($data = array(), $options = array())
@@ -184,7 +194,7 @@ class Garapon
         {
             throw new \Exception('Required gtvid');
         }
-        return $this->login()->request->post('search', $data, $options);
+        return $this->login()->_post('search', $data, $options);
     }
 
     public function searchProgram($data = array(), $options = array())
@@ -193,7 +203,7 @@ class Garapon
         {
             throw new \Exception('Required gtvid');
         }
-        return $this->login()->request->post('search', $data, $options);
+        return $this->login()->_post('search', $data, $options);
     }
 
     public function settings($path = null)
