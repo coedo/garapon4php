@@ -54,6 +54,35 @@ class Request {
         }
     }
 
+    public function buildUrl($method = '', $options = null)
+    {
+        $options = $options ? : $this->connection;
+        extract($options);
+        $url = sprintf("http://%s:%s/%s/%s/%s", $ip, $port, $api_dir, $api_version, $method);
+        if (isset($query))
+        {
+            $url .= '?' . http_build_query($query);
+        }
+        $this->url = $url;
+        return $this;
+    }
+
+    protected function _buildQuery($query, $addParams = true)
+    {
+        if ($addParams) {
+            if (isset($this->connection->developer_id))
+            {
+                $query['dev_id'] = $this->connection->developer_id;
+            }
+            if (isset($this->connection->gtvsession))
+            {
+                $query['gtvsession'] = $this->connection->gtvsession;
+            }
+        }
+        $result = '?' . http_build_query($query);
+        return $result;
+    }
+
     protected function _close()
     {
         $result = curl_close($this->_ch);
@@ -223,35 +252,6 @@ class Request {
     {
         $this->url = $url;
         return $this;
-    }
-
-    public function buildUrl($method = '', $options = null)
-    {
-        $options = $options ? : $this->connection;
-        extract($options);
-        $url = sprintf("http://%s:%s/%s/%s/%s", $ip, $port, $api_dir, $api_version, $method);
-        if (isset($query))
-        {
-            $url .= '?' . http_build_query($query);
-        }
-        $this->url = $url;
-        return $this;
-    }
-
-    protected function _buildQuery($query, $addParams = true)
-    {
-        if ($addParams) {
-            if (isset($this->connection->developer_id))
-            {
-                $query['dev_id'] = $this->connection->developer_id;
-            }
-            if (isset($this->connection->gtvsession))
-            {
-                $query['gtvsession'] = $this->connection->gtvsession;
-            }
-        }
-        $result = '?' . http_build_query($query);
-        return $result;
     }
 
     public function webRequest($data)
