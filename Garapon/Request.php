@@ -241,13 +241,13 @@ class Request {
     protected function _buildQuery($query, $addParams = true)
     {
         if ($addParams) {
-            if (!empty($this->connection['developer_id']))
+            if (isset($this->connection->developer_id))
             {
-                $query['dev_id'] = $this->connection['developer_id'];
+                $query['dev_id'] = $this->connection->developer_id;
             }
-            if (!empty($this->connection['gtvsession']))
+            if (isset($this->connection->gtvsession))
             {
-                $query['gtvsession'] = $this->connection['gtvsession'];
+                $query['gtvsession'] = $this->connection->gtvsession;
             }
         }
         $result = '?' . http_build_query($query);
