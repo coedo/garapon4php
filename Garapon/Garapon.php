@@ -36,6 +36,11 @@ class Garapon
     public $response;
 
     /**
+     * @var Request $webRequest
+     */
+    public $webRequest;
+
+    /**
      * @var
      */
     public $url;
@@ -103,33 +108,29 @@ class Garapon
             'md5passwd' => $this->settings['password'],
             'dev_id'    => $this->settings['developer_id'],
         );
-        $request = new Request(self::GARAPON_WEB_AUTH_URL);
-        $results = $request->webRequest($data);
-        $this->_getConnection($results);
+        $this->webRequest = new Request(self::GARAPON_WEB_AUTH_URL);
+        $this->webRequest->webRequest($data);
+        $this->_getConnection();
         return $this;
     }
 
-    protected function _getConnection($results)
+    protected function _getConnection()
     {
-        if (!empty($results['1']))
+        if (!$this->webRequest->response->success)
         {
-            throw new \Exception('ERROR: ' . $results['1']);
+            throw new \Exception('ERROR: ' . $this->webRequest->response->error_message);
         }
-        $keys = array_keys($this->_map);
-        $_results = $results;
-        foreach ($results as $key => $value)
+        foreach ($this->_map as $before => $after)
         {
-            if (in_array($key, $keys))
-            {
-                unset($_results[$key]);
-                $_results[$this->_map[$key]] = $value;
-            }
+            $value = $this->webRequest->response->results->$before;
+            unset($this->webRequest->response->results->$before);
+            $this->webRequest->response->results->$after = $value;
         }
-        unset($_results['0']);
-        $this->request->connection += $_results;
-        $settings = $this->settings;
-        unset($settings['password']);
-        $this->request->connection += $settings;
+        $connection = (array)$this->request->connection;
+        $results = (array)$this->webRequest->response->results;
+        $this->request->connection = (object)($connection + $results + $this->settings);
+        unset($this->request->connection->password);
+        return $this->request->connection;
     }
 
     public function isGetConnected()
@@ -148,7 +149,7 @@ class Garapon
         {
             return $this;
         }
-        $settings = $this->request->connection + $this->settings;
+        $settings = (array)$this->request->connection + $this->settings;
         $data = array(
             'type' => 'login',
             'loginid' => $settings['user_id'],
@@ -161,13 +162,13 @@ class Garapon
         {
             $this->getConnection();
         }
-        $results = $this->request->post('auth', $data, compact('query'));
-        $this->_checkStatus($results, array(
+        $this->request->post('auth', $data, compact('query'));
+        $this->_checkStatus(array(
             '0' => 'Status error or empty parameter',
             '100' => 'Login failed',
             '200' => 'Login failed',
         ));
-        $this->request->connection['gtvsession'] = $results['gtvsession'];
+        $this->request->connection->gtvsession = $this->response->results->gtvsession;
         return $this;
     }
 
@@ -177,11 +178,11 @@ class Garapon
         $url = "http://$host/gapi/$version/";
         $this->_gapi->url = $url;
     }
-    protected function _checkStatus($results, $errorMessages, $prefix = '')
+    protected function _checkStatus($errorMessages, $prefix = '')
     {
-        foreach ($results as $code => $value)
+        foreach ($this->response->results as $code => $value)
         {
-            if (array_key_exists($code, $errorMessages))
+            if (isset($errorMessages[$code]))
             {
                 throw new \Exception($prefix . $errorMessages[$code]);
             }

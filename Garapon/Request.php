@@ -114,7 +114,7 @@ class Request {
 
     public function request($method = '', $data = array(), $options = array())
     {
-        $options += $this->connection;
+        $options += (array)$this->connection;
         $this->buildUrl($method, $options);
         $this->method($method);
         $this->_init($this->url);
@@ -132,24 +132,23 @@ class Request {
         return $this->response->results;
     }
 
-    protected function _result($results)
+    protected function _result()
     {
-        $this->response->results = $results;
-        if (empty($results['status']))
+        if (empty($this->response->results->status))
         {
             // web
-            $this->response->success = array_key_exists('0', $results);
+            $this->response->success = empty($this->response->results->{1});
             if (!$this->response->success)
             {
-                $this->response->error_message = $results['1'];
+                $this->response->error_message = $this->response->results->{1};
             }
         } else {
             // API
-            $this->response->success = $results['status'] == '1';
+            $this->response->success = $this->response->results->status == '1';
             if (!$this->response->success)
             {
                 $messages = $this->error_messages[$this->method];
-                $this->response->error_message = $messages[$results['status']];
+                $this->response->error_message = $messages[$this->response->results->status];
             }
         }
         return $this->response->success;
@@ -197,29 +196,21 @@ class Request {
 
     protected function _parseGarapon($result)
     {
-        $results = array();
+        $results = new \stdClass();
         $result = preg_split("/\n/", $result);
-        if (!is_array($result))
-        {
-            return $result;
-        }
         foreach ($result as $record)
         {
-            if (empty($record) || strpos($record, ';') === false)
-            {
-                $results[] = $record;
-            } else {
-                list($key, $value) = preg_split('/;/', $record, 2);
-                $results[$key] = $value;
-            }
+            list($key, $value) = preg_split('/;/', $record, 2);
+            $results->$key = $value;
         }
-        return $results;
+        $this->response->results = $results;
+        return $this->response->results;
     }
 
     protected function _parseJson($result)
     {
-        $results = json_decode($result, true);
-        return $results;
+        $this->response->results = json_decode($result);
+        return $this->response->results;
     }
 
     public function post($method = '', $data = array(), $options = array())
