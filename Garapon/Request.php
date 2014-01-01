@@ -103,20 +103,6 @@ class Request {
         return $this;
     }
 
-    public function options($options, $value = null)
-    {
-        if (!is_null($value) && is_string($options))
-        {
-            $this->options[$options] = $value;
-        } else {
-            foreach ($options as $_key => $_value)
-            {
-                $this->options[$_key] = $_value;
-            }
-        }
-        return $this;
-    }
-
     protected function _init($url = null)
     {
         $url = $url ? $url : $this->url;
@@ -139,6 +125,20 @@ class Request {
             $result = curl_setopt($this->_ch, $option, $value);
         }
         return $result;
+    }
+
+    public function options($options, $value = null)
+    {
+        if (!is_null($value) && is_string($options))
+        {
+            $this->options[$options] = $value;
+        } else {
+            foreach ($options as $_key => $_value)
+            {
+                $this->options[$_key] = $_value;
+            }
+        }
+        return $this;
     }
 
     public function request($method = '', $data = array(), $options = array())
