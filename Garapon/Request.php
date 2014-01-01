@@ -6,21 +6,6 @@ namespace CoEdo\Garapon;
 class Request {
 
     /**
-     * @var array $options
-     */
-    public $options = array();
-
-    /**
-     * @var string $url
-     */
-    public $url;
-
-    /**
-     * @var int $timeout
-     */
-    public $timeout = 10;
-
-    /**
      * @var Resource $_ch
      */
     protected $_ch;
@@ -45,6 +30,21 @@ class Request {
      * @var string $method
      */
     public $method;
+
+    /**
+     * @var array $options
+     */
+    public $options = array();
+
+    /**
+     * @var int $timeout
+     */
+    public $timeout = 10;
+
+    /**
+     * @var string $url
+     */
+    public $url;
 
     public function __construct($url = null)
     {
