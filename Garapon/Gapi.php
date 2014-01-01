@@ -128,7 +128,7 @@ class Gapi {
 
     public function url($host, $version = null)
     {
-        $version = $version ? : $this->version;
+        $version = $version ? $version : $this->version;
         $url = "http://$host/gapi/$version/";
         $this->_gapi->url = $url;
     }
