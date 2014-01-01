@@ -57,6 +57,12 @@ class Garapon
         return $this;
     }
 
+    protected function _buildMethod($type, $prefix = '')
+    {
+        $result = $prefix . strtoupper($type[0]) . strtolower(substr($type, 1));
+        return $result;
+    }
+
     protected function _checkStatus($errorMessages, $prefix = '')
     {
         foreach ($this->response->results as $code => $value)
