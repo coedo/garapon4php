@@ -29,6 +29,7 @@ class Garapon
      * @var Request $request
      */
     public $request;
+
     /**
      * @var Response $response
      */
@@ -38,6 +39,7 @@ class Garapon
      * @var Gapi
      */
     private $_gapi;
+
     /**
      * @var Setting
      */
