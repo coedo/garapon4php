@@ -7,10 +7,9 @@ require_once 'Response.php';
 
 class Garapon
 {
-    const GARAPON_WEB_AUTH_URL = 'http://garagw.garapon.info/getgtvaddress';
-
-    const API_VERSION = 'v3';
     const API_DIR = 'gapi';
+    const API_VERSION = 'v3';
+    const GARAPON_WEB_AUTH_URL = 'http://garagw.garapon.info/getgtvaddress';
 
     /**
      * @var array $_map
