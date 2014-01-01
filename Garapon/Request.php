@@ -117,16 +117,6 @@ class Request {
         return $ch;
     }
 
-    protected function _setOption($option, $value = null)
-    {
-        if (is_array($option) && !$value) {
-            $result = curl_setopt_array($this->_ch, $option);
-        } else {
-            $result = curl_setopt($this->_ch, $option, $value);
-        }
-        return $result;
-    }
-
     public function options($options, $value = null)
     {
         if (!is_null($value) && is_string($options))
@@ -208,6 +198,16 @@ class Request {
         $results = $this->_parse($result, $type);
         $this->_result($results);
         return $results;
+    }
+
+    protected function _setOption($option, $value = null)
+    {
+        if (is_array($option) && !$value) {
+            $result = curl_setopt_array($this->_ch, $option);
+        } else {
+            $result = curl_setopt($this->_ch, $option, $value);
+        }
+        return $result;
     }
 
     public function get($method = '', $options = array())
