@@ -239,6 +239,9 @@ class Request {
         if ($result)
         {
             $this->_close();
+        } else {
+            $this->response->success = false;
+            $this->response->error_message = 'curl returns error code[' . curl_errno($this->_ch) . '] : ' . curl_error($this->_ch);
         }
         $results = $this->_parse($result, $type);
         $this->_result($results);
