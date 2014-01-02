@@ -1,5 +1,4 @@
 <?php
-
 namespace CoEdo\Garapon;
 
 require_once 'Gapi.php';
