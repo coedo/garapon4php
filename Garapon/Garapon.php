@@ -112,7 +112,7 @@ class Garapon extends Gapi
     {
         if (empty($data['rank']))
         {
-            throw new \Exception('Required gtvid');
+            throw new \Exception('Required rank');
         }
         return $this->login()->_post('search', $data, $options);
     }
