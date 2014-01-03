@@ -63,13 +63,11 @@ class Request {
         $options += (array)$this->connection;
         extract($options);
         $url = sprintf("http://%s:%s/%s/%s/%s", $ip, $port, $api_dir, $api_version, $method);
-        if (!isset($addParams) || $addParams == false)
-        {
+        if (!isset($addParams) || $addParams == false) {
             $query = isset($query) ? $query : array();
             $addParams = true;
         }
-        if (isset($query))
-        {
+        if (isset($query)) {
             $url .= $this->_buildQuery($query, $addParams);
         }
         $this->url = $url;
@@ -79,12 +77,10 @@ class Request {
     protected function _buildQuery($query, $addParams = true)
     {
         if ($addParams) {
-            if (isset($this->connection->developer_id))
-            {
+            if (isset($this->connection->developer_id)) {
                 $query['dev_id'] = $this->connection->developer_id;
             }
-            if (isset($this->connection->gtvsession))
-            {
+            if (isset($this->connection->gtvsession)) {
                 $query['gtvsession'] = $this->connection->gtvsession;
             }
         }
@@ -134,12 +130,10 @@ class Request {
 
     public function options($options, $value = null)
     {
-        if (!is_null($value) && is_string($options))
-        {
+        if (!is_null($value) && is_string($options)) {
             $this->options[$options] = $value;
         } else {
-            foreach ($options as $_key => $_value)
-            {
+            foreach ($options as $_key => $_value) {
                 $this->options[$_key] = $_value;
             }
         }
@@ -157,8 +151,7 @@ class Request {
     {
         $results = new \stdClass();
         $result = preg_split("/\n/", $result);
-        foreach ($result as $record)
-        {
+        foreach ($result as $record) {
             list($key, $value) = preg_split('/;/', $record, 2);
             $results->$key = $value;
         }
@@ -186,11 +179,9 @@ class Request {
         $this->_init($this->url);
         $httpMethod = $options['httpMethod'];
         unset($options['httpMethod']);
-        if (strtolower($httpMethod) == 'post')
-        {
+        if (strtolower($httpMethod) == 'post') {
             $this->_setOption(CURLOPT_POST, 1);
-            if (!empty($data))
-            {
+            if (!empty($data)) {
                 $this->_setOption(CURLOPT_POSTFIELDS, $data);
             }
         }
@@ -200,19 +191,16 @@ class Request {
 
     protected function _result()
     {
-        if (empty($this->response->results->status))
-        {
+        if (empty($this->response->results->status)) {
             // web
             $this->response->success = empty($this->response->results->{1});
-            if (!$this->response->success)
-            {
+            if (!$this->response->success) {
                 $this->response->error_message = $this->response->results->{1};
             }
         } else {
             // API
             $this->response->success = $this->response->results->status == '1';
-            if (!$this->response->success)
-            {
+            if (!$this->response->success) {
                 $messages = $this->error_messages[$this->method];
                 $this->response->error_message = $messages[$this->response->results->status];
             }
@@ -223,25 +211,20 @@ class Request {
     protected function _send($options = array())
     {
         $type = null;
-        if (!empty($options['type']))
-        {
+        if (!empty($options['type'])) {
             $type = $options['type'];
             unset($options['type']);
         }
-        if (!empty($options))
-        {
-            foreach ($options as $key => $value)
-            {
-                if (!is_int($key))
-                {
+        if (!empty($options)) {
+            foreach ($options as $key => $value) {
+                if (!is_int($key)) {
                     unset($options[$key]);
                 }
             }
             $this->_setOption($options);
         }
         $result = $this->_exec();
-        if ($result)
-        {
+        if ($result) {
             $this->_close();
         } else {
             $this->response->success = false;

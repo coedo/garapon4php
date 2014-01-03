@@ -20,10 +20,8 @@ class Gapi {
 
     protected function _checkStatus($errorMessages, $prefix = '')
     {
-        foreach ($this->response->results as $code => $value)
-        {
-            if (isset($errorMessages[$code]))
-            {
+        foreach ($this->response->results as $code => $value) {
+            if (isset($errorMessages[$code])) {
                 throw new \Exception($prefix . $errorMessages[$code]);
             }
         }
@@ -36,8 +34,7 @@ class Gapi {
 
     public function getConnection($force = false)
     {
-        if (!$force && ($this->isLoggedIn() || $this->isGetConnected()))
-        {
+        if (!$force && ($this->isLoggedIn() || $this->isGetConnected())) {
             return $this;
         }
         $data = array(
@@ -53,12 +50,10 @@ class Gapi {
 
     protected function _getConnection()
     {
-        if (!$this->webRequest->response->success)
-        {
+        if (!$this->webRequest->response->success) {
             throw new \Exception('ERROR: ' . $this->webRequest->response->error_message);
         }
-        foreach ($this->_map as $before => $after)
-        {
+        foreach ($this->_map as $before => $after) {
             $value = $this->webRequest->response->results->$before;
             unset($this->webRequest->response->results->$before);
             $this->webRequest->response->results->$after = $value;
@@ -88,8 +83,7 @@ class Gapi {
     public function settings($path = null)
     {
         $defaultPath = 'developer_info.json';
-        if (!$path)
-        {
+        if (!$path) {
             $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . $defaultPath;
         }
         $settings = $this->_settings($path);
@@ -100,14 +94,12 @@ class Gapi {
 
     protected function _settings($path)
     {
-        if (!file_exists($path))
-        {
+        if (!file_exists($path)) {
             throw new \Exception("File not found: $path");
         }
         $json = file_get_contents($path);
         $settings = json_decode($json, true);
-        if ($settings == null || !is_array($settings))
-        {
+        if ($settings == null || !is_array($settings)) {
             throw new \Exception("Cannot Decode JSON file: $path");
         }
         $defaults = array(
@@ -118,8 +110,7 @@ class Gapi {
             'api_dir' => $this::API_DIR,
         );
         $settings += $defaults;
-        if (empty($settings['user_id']) || empty($settings['password']) || empty($settings['developer_id']))
-        {
+        if (empty($settings['user_id']) || empty($settings['password']) || empty($settings['developer_id'])) {
             throw new \Exception('Invalid config file');
         }
         return $settings;

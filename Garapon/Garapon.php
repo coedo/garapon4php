@@ -51,8 +51,7 @@ class Garapon extends Gapi
 
     public function login($force = false)
     {
-        if (!$force && $this->isLoggedIn())
-        {
+        if (!$force && $this->isLoggedIn()) {
             return $this;
         }
         $settings = (array)$this->request->connection + $this->settings;
@@ -64,8 +63,7 @@ class Garapon extends Gapi
         $query = array(
             'dev_id' => $settings['developer_id'],
         );
-        if (!$this->isGetConnected())
-        {
+        if (!$this->isGetConnected()) {
             $this->getConnection();
         }
         $this->request->post('auth', $data, compact('query'));
@@ -88,8 +86,7 @@ class Garapon extends Gapi
     public function search($type, $data = array(), $options = array())
     {
         $method = $this->_buildMethod($type, 'search');
-        if (!method_exists($this, $method))
-        {
+        if (!method_exists($this, $method)) {
             throw new \Exception("Undefined search type: $type");
         }
         return $this->{$method}($data, $options);
@@ -109,8 +106,7 @@ class Garapon extends Gapi
 
     public function searchFavorite($data = array(), $options = array())
     {
-        if (empty($data['rank']))
-        {
+        if (empty($data['rank'])) {
             throw new \Exception('Required rank');
         }
         return $this->login()->_post('search', $data, $options);
@@ -118,8 +114,7 @@ class Garapon extends Gapi
 
     public function searchProgram($data = array(), $options = array())
     {
-        if (empty($data['gtvid']))
-        {
+        if (empty($data['gtvid'])) {
             throw new \Exception('Required gtvid');
         }
         return $this->login()->_post('search', $data, $options);
