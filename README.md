@@ -18,7 +18,17 @@ mv developer_info.json.sample developer_info.json
 ### Example
 
 ```php
-$garapon = new Garapon();
+<?php
+
+require_once '../Garapon/Garapon.php';
+
+$garapon = new \CoEdo\Garapon\Garapon();
+$results = $garapon->search('favorite', array(
+    'rank' => 'all',
+));
+var_dump($garapon->response->success);
+var_dump($results);
+
 $results = $garapon->search('EPG', ['key' => '地方裁判所']);
 var_dump($results);
 ```
