@@ -15,6 +15,19 @@ mv developer_info.json.sample developer_info.json
 {"user_id":"login_user_id","password":"md5sum for password","developer_id":"garapon developer id"}
 ```
 
+ガラポンTVのIPアドレス等がすでに分かっている場合は以下のように
+
+```
+{
+    "user_id": "login_user_id",
+    "password": "md5sum for password",
+    "developer_id": "garapon developer id",
+    "global_ip": "xxx.xxx.xx.xx",
+    "port": "12345"
+}
+```
+
+
 ### Example
 
 ```php
